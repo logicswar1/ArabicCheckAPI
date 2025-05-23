@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
 import re
+import os
 
 app = Flask(__name__)
 
+# Load and normalize words
 with open('cleaned_arabic_words.txt', 'r', encoding='utf-8') as f:
     valid_words = set(word.strip() for word in f if len(word.strip()) > 2)
 
@@ -22,5 +24,7 @@ def validate_word():
     is_valid = normalized in valid_words
     return jsonify({"valid": is_valid})
 
+# ✅ This should be at the very end
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
